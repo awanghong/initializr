@@ -108,6 +108,24 @@
       }
     ]
   },
+  "architectures": {
+    "content": [
+      {
+        "default": false,
+        "id": "none",
+        "name": "None"
+      },
+      {
+        "default": true,
+        "id": "mvc",
+        "name": "Mvc"
+      }
+    ],
+    "description": "project architecture",
+    "id": "architecture",
+    "title": "Architecture",
+    "type": "SINGLE_SELECT"
+  },
   "name": {
     "id": "name",
     "type": "TEXT",

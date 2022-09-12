@@ -63,6 +63,12 @@ public class ProjectRequestDocumentFactory {
 			document.triggerError().setLanguage(true);
 		}
 
+		document.setArchitecture(request.getArchitecture());
+		if (StringUtils.hasText(request.getArchitecture())
+				&& metadata.getArchitectures().get(request.getArchitecture()) == null) {
+			document.triggerError().setArchitecture(true);
+		}
+
 		document.setPackaging(request.getPackaging());
 		if (StringUtils.hasText(request.getPackaging())
 				&& metadata.getPackagings().get(request.getPackaging()) == null) {

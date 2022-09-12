@@ -48,7 +48,7 @@ class InitializrMetadataV21JsonMapperTests {
 		String json = this.jsonMapper.write(metadata, null);
 		JsonNode result = objectMapper.readTree(json);
 		assertThat(get(result, "_links.foo.href"))
-				.isEqualTo("/foo.zip?type=foo{&dependencies,packaging,javaVersion,language,bootVersion,"
+				.isEqualTo("/foo.zip?type=foo{&dependencies,packaging,javaVersion,language,architecture,bootVersion,"
 						+ "groupId,artifactId,version,name,description,packageName}");
 	}
 
@@ -60,7 +60,7 @@ class InitializrMetadataV21JsonMapperTests {
 		JsonNode result = objectMapper.readTree(json);
 		assertThat(get(result, "_links.foo.href"))
 				.isEqualTo("http://server:8080/my-app/foo.zip?type=foo{&dependencies,packaging,javaVersion,"
-						+ "language,bootVersion,groupId,artifactId,version,name,description,packageName}");
+						+ "language,architecture,bootVersion,groupId,artifactId,version,name,description,packageName}");
 	}
 
 	@Test

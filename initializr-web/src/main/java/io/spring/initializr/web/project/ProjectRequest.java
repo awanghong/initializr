@@ -54,8 +54,18 @@ public class ProjectRequest {
 
 	private String javaVersion;
 
+	private String architecture;
+
 	// The base directory to create in the archive - no baseDir by default
 	private String baseDir;
+
+	public String getArchitecture() {
+		return this.architecture;
+	}
+
+	public void setArchitecture(String architecture) {
+		this.architecture = architecture;
+	}
 
 	public List<String> getDependencies() {
 		return this.dependencies;

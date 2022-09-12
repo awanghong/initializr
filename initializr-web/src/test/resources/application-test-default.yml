@@ -150,6 +150,13 @@ initializr:
     - name: Kotlin
       id: kotlin
       default: false
+  architectures:
+    - name: None
+      id: none
+      default: false
+    - name: Mvc
+      id: mvc
+      default: true
   bootVersions:
     - name : Latest SNAPSHOT
       id: 2.5.0-SNAPSHOT

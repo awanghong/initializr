@@ -119,4 +119,10 @@ public interface ProjectDescription {
 	 */
 	String getBaseDirectory();
 
+	/**
+	 * Return the architecture of the application as a standard Java identifier.
+	 * @return the architecture of the application
+	 */
+	String getArchitecture();
+
 }

@@ -48,6 +48,8 @@ public class ProjectRequestDocument {
 
 	private String language;
 
+	private String architecture;
+
 	private String packaging;
 
 	private String packageName;
@@ -114,6 +116,14 @@ public class ProjectRequestDocument {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+
+	public String getArchitecture() {
+		return this.architecture;
+	}
+
+	public void setArchitecture(String architecture) {
+		this.architecture = architecture;
 	}
 
 	public String getPackaging() {
@@ -317,6 +327,8 @@ public class ProjectRequestDocument {
 
 		private Boolean language;
 
+		private Boolean architecture;
+
 		private Boolean packaging;
 
 		private Boolean type;
@@ -324,6 +336,14 @@ public class ProjectRequestDocument {
 		private InvalidDependencyInformation dependencies;
 
 		private String message;
+
+		public Boolean getArchitecture() {
+			return this.architecture;
+		}
+
+		public void setArchitecture(Boolean architecture) {
+			this.architecture = architecture;
+		}
 
 		public boolean isInvalid() {
 			return this.invalid;

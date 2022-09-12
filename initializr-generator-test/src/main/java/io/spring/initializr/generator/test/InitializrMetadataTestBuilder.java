@@ -85,7 +85,7 @@ public class InitializrMetadataTestBuilder {
 
 	public InitializrMetadataTestBuilder addBasicDefaults() {
 		return addDefaultTypes().addDefaultPackagings().addDefaultJavaVersions().addDefaultLanguages()
-				.addDefaultBootVersions();
+				.addDefaultBootVersions().addDefaultArchitectures();
 	}
 
 	public InitializrMetadataTestBuilder addDefaultTypes() {
@@ -148,6 +148,21 @@ public class InitializrMetadataTestBuilder {
 
 	public InitializrMetadataTestBuilder addDefaultLanguages() {
 		return addLanguage("java", true).addLanguage("groovy", false).addLanguage("kotlin", false);
+	}
+
+	public InitializrMetadataTestBuilder addDefaultArchitectures() {
+		return addArchitecture("mvc", true).addArchitecture("none", false);
+	}
+
+	public InitializrMetadataTestBuilder addArchitecture(String id, boolean defaultValue) {
+		this.builder.withCustomizer((it) -> {
+			DefaultMetadataElement element = new DefaultMetadataElement();
+			element.setId(id);
+			element.setName(id);
+			element.setDefault(defaultValue);
+			it.getArchitectures().addContent(element);
+		});
+		return this;
 	}
 
 	public InitializrMetadataTestBuilder addLanguage(String id, boolean defaultValue) {

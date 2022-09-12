@@ -92,16 +92,28 @@ public class DefaultProjectRequestToDescriptionConverter
 		description.setPackaging(Packaging.forId(request.getPackaging()));
 		description.setPlatformVersion(platformVersion);
 		description.setVersion(request.getVersion());
+		description.setArchitecture(request.getArchitecture());
 		resolvedDependencies.forEach((dependency) -> description.addDependency(dependency.getId(),
 				MetadataBuildItemMapper.toDependency(dependency)));
 	}
 
 	private void validate(ProjectRequest request, InitializrMetadata metadata) {
+		validateArchitecture(request.getArchitecture(), metadata);
 		validatePlatformVersion(request, metadata);
 		validateType(request.getType(), metadata);
 		validateLanguage(request.getLanguage(), metadata);
 		validatePackaging(request.getPackaging(), metadata);
 		validateDependencies(request, metadata);
+	}
+
+	private void validateArchitecture(String architecture, InitializrMetadata metadata) {
+		if (architecture != null) {
+			DefaultMetadataElement architectureFromMetadata = metadata.getArchitectures().get(architecture);
+			if (architectureFromMetadata == null) {
+				throw new InvalidProjectRequestException(
+						"Unknown architecture '" + architecture + "' check project metadata");
+			}
+		}
 	}
 
 	private void validatePlatformVersion(ProjectRequest request, InitializrMetadata metadata) {

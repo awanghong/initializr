@@ -61,6 +61,8 @@ public class MutableProjectDescription implements ProjectDescription {
 
 	private String baseDirectory;
 
+	private String architecture;
+
 	public MutableProjectDescription() {
 	}
 
@@ -214,6 +216,15 @@ public class MutableProjectDescription implements ProjectDescription {
 	@Override
 	public String getBaseDirectory() {
 		return this.baseDirectory;
+	}
+
+	@Override
+	public String getArchitecture() {
+		return this.architecture;
+	}
+
+	public void setArchitecture(String architecture) {
+		this.architecture = architecture;
 	}
 
 	public void setBaseDirectory(String baseDirectory) {

@@ -63,6 +63,12 @@ public class InitializrProperties extends InitializrConfiguration {
 	private final List<DefaultMetadataElement> languages = new ArrayList<>();
 
 	/**
+	 * Available project architectures.
+	 */
+	@JsonIgnore
+	private final List<DefaultMetadataElement> architectures = new ArrayList<>();
+
+	/**
 	 * Available Spring Boot versions.
 	 */
 	@JsonIgnore
@@ -122,6 +128,10 @@ public class InitializrProperties extends InitializrConfiguration {
 
 	public List<DefaultMetadataElement> getLanguages() {
 		return this.languages;
+	}
+
+	public List<DefaultMetadataElement> getArchitectures() {
+		return this.architectures;
 	}
 
 	public List<DefaultMetadataElement> getBootVersions() {

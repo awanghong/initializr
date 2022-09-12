@@ -17,6 +17,13 @@ initializr:
     - name: Groovy
       id: groovy
       default: false
+  architectures:
+    - name: None
+      id: none
+      default: false
+    - name: Mvc
+      id: mvc
+      default: true
   javaVersions:
     - id: 11
       default: true
