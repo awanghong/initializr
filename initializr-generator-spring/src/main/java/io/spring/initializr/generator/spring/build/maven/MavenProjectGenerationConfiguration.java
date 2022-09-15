@@ -26,9 +26,11 @@ import io.spring.initializr.generator.condition.ConditionalOnBuildSystem;
 import io.spring.initializr.generator.condition.ConditionalOnPackaging;
 import io.spring.initializr.generator.io.IndentingWriterFactory;
 import io.spring.initializr.generator.packaging.war.WarPackaging;
+import io.spring.initializr.generator.project.ProjectDescription;
 import io.spring.initializr.generator.project.ProjectGenerationConfiguration;
 import io.spring.initializr.generator.spring.build.BuildCustomizer;
 import io.spring.initializr.generator.spring.util.LambdaSafe;
+import io.spring.initializr.metadata.InitializrMetadata;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
@@ -64,9 +66,9 @@ public class MavenProjectGenerationConfiguration {
 	}
 
 	@Bean
-	public MavenBuildProjectContributor mavenBuildProjectContributor(MavenBuild build,
-			IndentingWriterFactory indentingWriterFactory) {
-		return new MavenBuildProjectContributor(build, indentingWriterFactory);
+	public MavenBuildProjectContributor mavenBuildProjectContributor(ProjectDescription description,
+			InitializrMetadata metadata, MavenBuild build, IndentingWriterFactory indentingWriterFactory) {
+		return new MavenBuildProjectContributor(description, metadata, build, indentingWriterFactory);
 	}
 
 	@Bean

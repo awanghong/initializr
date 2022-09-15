@@ -19,6 +19,7 @@ package io.spring.initializr.generator.buildsystem.maven;
 import io.spring.initializr.generator.buildsystem.Build;
 import io.spring.initializr.generator.buildsystem.BuildItemResolver;
 import io.spring.initializr.generator.buildsystem.MavenRepositoryContainer;
+import io.spring.initializr.generator.buildsystem.ModuleContainer;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuildSettings.Builder;
 
 /**
@@ -41,9 +42,12 @@ public class MavenBuild extends Build {
 
 	private final MavenProfileContainer profiles;
 
+	private final ModuleContainer modules;
+
 	public MavenBuild(BuildItemResolver buildItemResolver) {
 		super(buildItemResolver);
 		this.profiles = new MavenProfileContainer(determineBuildItemResolver(buildItemResolver));
+		this.modules = new ModuleContainer();
 	}
 
 	public MavenBuild() {
@@ -112,6 +116,15 @@ public class MavenBuild extends Build {
 	 */
 	public MavenProfileContainer profiles() {
 		return this.profiles;
+	}
+
+	/**
+	 * Return the {@linkplain ModuleContainer property container} to use to configure
+	 * profiles.
+	 * @return the {@link ModuleContainer}
+	 */
+	public ModuleContainer modules() {
+		return this.modules;
 	}
 
 }

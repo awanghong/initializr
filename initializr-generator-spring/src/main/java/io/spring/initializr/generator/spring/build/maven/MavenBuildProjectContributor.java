@@ -22,11 +22,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import io.spring.initializr.generator.buildsystem.BuildWriter;
+import io.spring.initializr.generator.buildsystem.Dependency;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuild;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuildWriter;
 import io.spring.initializr.generator.io.IndentingWriter;
 import io.spring.initializr.generator.io.IndentingWriterFactory;
+import io.spring.initializr.generator.project.ProjectDescription;
 import io.spring.initializr.generator.project.contributor.ProjectContributor;
+import io.spring.initializr.generator.spring.util.MavenModuleUtil;
+import io.spring.initializr.generator.version.VersionReference;
+import io.spring.initializr.metadata.InitializrMetadata;
 
 /**
  * {@link ProjectContributor} to contribute the files for a {@link MavenBuild}.
@@ -42,7 +47,14 @@ public class MavenBuildProjectContributor implements BuildWriter, ProjectContrib
 
 	private final MavenBuildWriter buildWriter;
 
-	public MavenBuildProjectContributor(MavenBuild build, IndentingWriterFactory indentingWriterFactory) {
+	private final ProjectDescription description;
+
+	private final InitializrMetadata metadata;
+
+	public MavenBuildProjectContributor(ProjectDescription description, InitializrMetadata metadata, MavenBuild build,
+			IndentingWriterFactory indentingWriterFactory) {
+		this.description = description;
+		this.metadata = metadata;
 		this.build = build;
 		this.indentingWriterFactory = indentingWriterFactory;
 		this.buildWriter = new MavenBuildWriter();
@@ -50,14 +62,86 @@ public class MavenBuildProjectContributor implements BuildWriter, ProjectContrib
 
 	@Override
 	public void contribute(Path projectRoot) throws IOException {
+		String architecture = obtainArchitecture();
+		if (MavenModuleUtil.NONE_ARCHITECTURE.equals(architecture)) {
+			singleModulePomCreateAndFill(projectRoot);
+		}
+		else {
+			multiModulePomCreateAndFill(projectRoot);
+		}
+	}
+
+	private void multiModulePomCreateAndFill(Path projectRoot) throws IOException {
+		String model = this.description.getName() + "-model";
+		createModule(model, projectRoot);
+		String service = this.description.getName() + "-service";
+		createModule(service, projectRoot, model);
+		String web = this.description.getName() + "-web";
+		createModule(web, projectRoot, model, service);
+		createModule(MavenModuleUtil.START, projectRoot, web);
+		createMainModule(projectRoot, model, service, web, MavenModuleUtil.START);
+	}
+
+	private void createMainModule(Path projectRoot, String... dependModule) throws IOException {
+		Path pomFile = Files.createFile(projectRoot.resolve("pom.xml"));
+		writeMainBuild(Files.newBufferedWriter(pomFile), dependModule);
+	}
+
+	public void writeMainBuild(Writer out, String... dependModule) throws IOException {
+		try (IndentingWriter writer = this.indentingWriterFactory.createIndentingWriter("maven", out)) {
+			for (String depend : dependModule) {
+				this.build.modules().module(depend);
+			}
+			this.buildWriter.writeTo(writer, this.build);
+		}
+	}
+
+	private void singleModulePomCreateAndFill(Path projectRoot) throws IOException {
 		Path pomFile = Files.createFile(projectRoot.resolve("pom.xml"));
 		writeBuild(Files.newBufferedWriter(pomFile));
+	}
+
+	private String obtainArchitecture() {
+		String architecture = this.description.getArchitecture();
+		String aDefault = this.metadata.getArchitectures().getDefault().getId();
+		architecture = (architecture != null) ? architecture : aDefault;
+		architecture = (architecture != null) ? architecture : MavenModuleUtil.MVC_ARCHITECTURE;
+		return architecture;
 	}
 
 	@Override
 	public void writeBuild(Writer out) throws IOException {
 		try (IndentingWriter writer = this.indentingWriterFactory.createIndentingWriter("maven", out)) {
 			this.buildWriter.writeTo(writer, this.build);
+		}
+	}
+
+	private void createModule(String moduleName, Path projectRoot, String... dependModule) throws IOException {
+		Path changelogDirectory = projectRoot.resolve(moduleName);
+		Files.createDirectories(changelogDirectory);
+		Path output = projectRoot.resolve(moduleName + "/pom.xml");
+		if (!Files.exists(output)) {
+			Files.createDirectories(output.getParent());
+			Files.createFile(output);
+		}
+		writeMultiModuleBuild(moduleName, Files.newBufferedWriter(output), dependModule);
+	}
+
+	public void writeMultiModuleBuild(String moduleName, Writer out, String... dependModule) throws IOException {
+		try (IndentingWriter writer = this.indentingWriterFactory.createIndentingWriter("maven", out)) {
+			MavenBuild newMavenBuild = new MavenBuild();
+			newMavenBuild.settings().artifact(moduleName);
+			newMavenBuild.settings().version(this.build.getSettings().getVersion());
+			newMavenBuild.settings().parent(this.build.getSettings().getGroup(), this.build.getSettings().getArtifact(),
+					this.build.getSettings().getVersion(), "../pom.xml");
+			if (dependModule != null) {
+				for (String singleModule : dependModule) {
+					Dependency original = Dependency.withCoordinates(this.build.getSettings().getGroup(), singleModule)
+							.version(VersionReference.ofValue("${project.version}")).build();
+					newMavenBuild.dependencies().add(singleModule, Dependency.from(original));
+				}
+			}
+			this.buildWriter.writeTo(writer, newMavenBuild);
 		}
 	}
 

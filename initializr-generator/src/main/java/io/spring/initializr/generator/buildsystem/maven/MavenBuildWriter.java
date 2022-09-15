@@ -37,6 +37,7 @@ import io.spring.initializr.generator.buildsystem.DependencyContainer;
 import io.spring.initializr.generator.buildsystem.DependencyScope;
 import io.spring.initializr.generator.buildsystem.MavenRepository;
 import io.spring.initializr.generator.buildsystem.MavenRepositoryContainer;
+import io.spring.initializr.generator.buildsystem.ModuleContainer;
 import io.spring.initializr.generator.buildsystem.PropertyContainer;
 import io.spring.initializr.generator.buildsystem.maven.MavenDistributionManagement.DeploymentRepository;
 import io.spring.initializr.generator.buildsystem.maven.MavenDistributionManagement.Relocation;
@@ -79,6 +80,7 @@ public class MavenBuildWriter {
 			writeCollectionElement(writer, "developers", settings.getDevelopers(), this::writeDeveloper);
 			writeScm(writer, settings.getScm());
 			writeProperties(writer, build.properties());
+			writeModules(writer, build.modules());
 			writeDependencies(writer, build.dependencies());
 			writeDependencyManagement(writer, build.boms());
 			writeBuild(writer, build);
@@ -160,6 +162,14 @@ public class MavenBuildWriter {
 			properties.versions((VersionProperty::toStandardFormat))
 					.forEach((entry) -> writeSingleElement(writer, entry.getKey(), entry.getValue()));
 		});
+	}
+
+	private void writeModules(IndentingWriter writer, ModuleContainer modules) {
+		if (modules.isEmpty()) {
+			return;
+		}
+		writeElement(writer, "modules",
+				() -> modules.values().forEach((entry) -> writeSingleElement(writer, "module", entry)));
 	}
 
 	private void writeLicense(IndentingWriter writer, MavenLicense license) {

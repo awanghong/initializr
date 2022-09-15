@@ -29,6 +29,7 @@ import io.spring.initializr.generator.language.TypeDeclaration;
 import io.spring.initializr.generator.project.ProjectDescription;
 import io.spring.initializr.generator.project.contributor.ProjectContributor;
 import io.spring.initializr.generator.spring.util.LambdaSafe;
+import io.spring.initializr.generator.spring.util.MavenModuleUtil;
 
 import org.springframework.beans.factory.ObjectProvider;
 
@@ -77,6 +78,7 @@ public class MainSourceCodeProjectContributor<T extends TypeDeclaration, C exten
 		customizeMainApplicationType(mainApplicationType);
 		customizeMainCompilationUnit(compilationUnit);
 		customizeMainSourceCode(sourceCode);
+		projectRoot = MavenModuleUtil.obtainMavenModulePath(this.description.getArchitecture(), projectRoot);
 		this.sourceWriter.writeTo(
 				this.description.getBuildSystem().getMainSource(projectRoot, this.description.getLanguage()),
 				sourceCode);
