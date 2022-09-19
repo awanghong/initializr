@@ -16,6 +16,7 @@
 
 package io.spring.initializr.generator.project;
 
+import java.util.List;
 import java.util.Map;
 
 import io.spring.initializr.generator.buildsystem.BuildSystem;
@@ -46,6 +47,12 @@ public interface ProjectDescription {
 	 * @return the requested dependencies
 	 */
 	Map<String, Dependency> getRequestedDependencies();
+
+	/**
+	 * Return a immutable list of requested.
+	 * @return the requested demos
+	 */
+	List<String> getRequestedDemos();
 
 	/**
 	 * Return the requested platform {@link Version}.

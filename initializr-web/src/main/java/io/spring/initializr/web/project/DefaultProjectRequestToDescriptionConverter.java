@@ -80,6 +80,7 @@ public class DefaultProjectRequestToDescriptionConverter
 		List<Dependency> resolvedDependencies = getResolvedDependencies(request, platformVersion, metadata);
 		validateDependencyRange(platformVersion, resolvedDependencies);
 
+		description.setRequestedDemos(request.getDemos());
 		description.setApplicationName(request.getApplicationName());
 		description.setArtifactId(request.getArtifactId());
 		description.setBaseDirectory(request.getBaseDir());

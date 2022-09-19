@@ -30,6 +30,8 @@ public class ProjectRequest {
 
 	private List<String> dependencies = new ArrayList<>();
 
+	private List<String> demos = new ArrayList<>();
+
 	private String name;
 
 	private String type;
@@ -58,6 +60,14 @@ public class ProjectRequest {
 
 	// The base directory to create in the archive - no baseDir by default
 	private String baseDir;
+
+	public List<String> getDemos() {
+		return this.demos;
+	}
+
+	public void setDemos(List<String> demos) {
+		this.demos = demos;
+	}
 
 	public String getArchitecture() {
 		return this.architecture;

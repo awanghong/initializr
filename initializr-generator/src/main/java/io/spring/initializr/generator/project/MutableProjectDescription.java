@@ -16,8 +16,10 @@
 
 package io.spring.initializr.generator.project;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.spring.initializr.generator.buildsystem.BuildSystem;
@@ -44,6 +46,8 @@ public class MutableProjectDescription implements ProjectDescription {
 	private Language language;
 
 	private final Map<String, Dependency> requestedDependencies = new LinkedHashMap<>();
+
+	private List<String> requestedDemos = new ArrayList<>();
 
 	private String groupId;
 
@@ -76,6 +80,7 @@ public class MutableProjectDescription implements ProjectDescription {
 		this.packaging = source.getPackaging();
 		this.language = source.getLanguage();
 		this.requestedDependencies.putAll(source.getRequestedDependencies());
+		this.requestedDemos.addAll(source.requestedDemos);
 		this.groupId = source.getGroupId();
 		this.artifactId = source.getArtifactId();
 		this.version = source.getVersion();
@@ -142,6 +147,15 @@ public class MutableProjectDescription implements ProjectDescription {
 	@Override
 	public Map<String, Dependency> getRequestedDependencies() {
 		return Collections.unmodifiableMap(this.requestedDependencies);
+	}
+
+	@Override
+	public List<String> getRequestedDemos() {
+		return this.requestedDemos;
+	}
+
+	public void setRequestedDemos(List<String> requestedDemos) {
+		this.requestedDemos = requestedDemos;
 	}
 
 	@Override
