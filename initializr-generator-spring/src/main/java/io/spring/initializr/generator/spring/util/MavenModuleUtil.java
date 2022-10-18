@@ -38,20 +38,38 @@ public final class MavenModuleUtil {
 	/**
 	 * main class location module.
 	 */
-	public static final String START;
+	public static final String API;
+
+	/**
+	 * main class location module.
+	 */
+	public static final String COMMON;
+
+	/**
+	 * main class location module.
+	 */
+	public static final String CORE;
+
+	/**
+	 * main class location module.
+	 */
+	public static final String WEB;
 
 	static {
 		MVC_ARCHITECTURE = "mvc";
-		START = "start";
 		NONE_ARCHITECTURE = "none";
+		API = "-api";
+		COMMON = "-common";
+		CORE = "-core";
+		WEB = "-web";
 	}
 
 	private MavenModuleUtil() {
 	}
 
-	public static Path obtainMavenModulePath(String architecture, Path projectRoot) {
+	public static Path obtainMavenModulePath(String architecture, String name, Path projectRoot) {
 		if (MVC_ARCHITECTURE.equals(architecture)) {
-			projectRoot = projectRoot.resolve(MavenModuleUtil.START + "/");
+			projectRoot = projectRoot.resolve(name + MavenModuleUtil.WEB + "/");
 		}
 		return projectRoot;
 	}

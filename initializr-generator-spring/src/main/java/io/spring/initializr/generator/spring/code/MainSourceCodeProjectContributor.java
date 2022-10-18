@@ -78,7 +78,8 @@ public class MainSourceCodeProjectContributor<T extends TypeDeclaration, C exten
 		customizeMainApplicationType(mainApplicationType);
 		customizeMainCompilationUnit(compilationUnit);
 		customizeMainSourceCode(sourceCode);
-		projectRoot = MavenModuleUtil.obtainMavenModulePath(this.description.getArchitecture(), projectRoot);
+		projectRoot = MavenModuleUtil.obtainMavenModulePath(this.description.getArchitecture(),
+				this.description.getName(), projectRoot);
 		this.sourceWriter.writeTo(
 				this.description.getBuildSystem().getMainSource(projectRoot, this.description.getLanguage()),
 				sourceCode);

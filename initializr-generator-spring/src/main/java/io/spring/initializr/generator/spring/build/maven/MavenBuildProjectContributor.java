@@ -72,14 +72,15 @@ public class MavenBuildProjectContributor implements BuildWriter, ProjectContrib
 	}
 
 	private void multiModulePomCreateAndFill(Path projectRoot) throws IOException {
-		String model = this.description.getName() + "-model";
-		createModule(model, projectRoot);
-		String service = this.description.getName() + "-service";
-		createModule(service, projectRoot, model);
+		String api = this.description.getName() + "-api";
+		createModule(api, projectRoot);
+		String common = this.description.getName() + "-common";
+		createModule(common, projectRoot);
+		String core = this.description.getName() + "-core";
+		createModule(core, projectRoot, api, common);
 		String web = this.description.getName() + "-web";
-		createModule(web, projectRoot, model, service);
-		createModule(MavenModuleUtil.START, projectRoot, web);
-		createMainModule(projectRoot, model, service, web, MavenModuleUtil.START);
+		createModule(web, projectRoot, core);
+		createMainModule(projectRoot, api, common, core, web);
 	}
 
 	private void createMainModule(Path projectRoot, String... dependModule) throws IOException {

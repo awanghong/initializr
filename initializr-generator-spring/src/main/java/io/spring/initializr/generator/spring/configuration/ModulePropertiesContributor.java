@@ -41,7 +41,8 @@ public class ModulePropertiesContributor extends SingleResourceProjectContributo
 
 	@Override
 	public void contribute(Path projectRoot) throws IOException {
-		projectRoot = MavenModuleUtil.obtainMavenModulePath(this.description.getArchitecture(), projectRoot);
+		projectRoot = MavenModuleUtil.obtainMavenModulePath(this.description.getArchitecture(),
+				this.description.getName(), projectRoot);
 		super.contribute(projectRoot);
 	}
 

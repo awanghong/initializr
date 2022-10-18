@@ -73,7 +73,8 @@ public class TestSourceCodeProjectContributor<T extends TypeDeclaration, C exten
 		T testApplicationType = compilationUnit.createTypeDeclaration(testName);
 		customizeTestApplicationType(testApplicationType);
 		customizeTestSourceCode(sourceCode);
-		projectRoot = MavenModuleUtil.obtainMavenModulePath(this.description.getArchitecture(), projectRoot);
+		projectRoot = MavenModuleUtil.obtainMavenModulePath(this.description.getArchitecture(),
+				this.description.getName(), projectRoot);
 		this.sourceWriter.writeTo(
 				this.description.getBuildSystem().getTestSource(projectRoot, this.description.getLanguage()),
 				sourceCode);
