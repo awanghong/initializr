@@ -130,7 +130,7 @@ public class MavenBuildProjectContributor implements BuildWriter, ProjectContrib
 
 	public void writeMultiModuleBuild(String moduleName, Writer out, String... dependModule) throws IOException {
 		try (IndentingWriter writer = this.indentingWriterFactory.createIndentingWriter("maven", out)) {
-			MavenBuild newMavenBuild = new MavenBuild();
+			MavenBuild newMavenBuild = this.build.modules().obtainModuleBuild(moduleName);
 			newMavenBuild.settings().artifact(moduleName);
 			newMavenBuild.settings().version(this.build.getSettings().getVersion());
 			newMavenBuild.settings().parent(this.build.getSettings().getGroup(), this.build.getSettings().getArtifact(),
