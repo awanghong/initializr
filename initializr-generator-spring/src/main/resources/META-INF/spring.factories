@@ -4,7 +4,7 @@ io.spring.initializr.generator.spring.build.gradle.GradleProjectGenerationConfig
 io.spring.initializr.generator.spring.build.maven.MavenProjectGenerationConfiguration,\
 io.spring.initializr.generator.spring.code.SourceCodeProjectGenerationConfiguration,\
 io.spring.initializr.generator.spring.code.groovy.GroovyProjectGenerationConfiguration,\
-io.spring.initializr.generator.spring.code.java.JavaProjectGenerationConfiguration,\
+#io.spring.initializr.generator.spring.code.java.JavaProjectGenerationConfiguration,\
 io.spring.initializr.generator.spring.code.kotlin.KotlinProjectGenerationConfiguration,\
 io.spring.initializr.generator.spring.configuration.ApplicationConfigurationProjectGenerationConfiguration,\
 io.spring.initializr.generator.spring.documentation.HelpDocumentProjectGenerationConfiguration,\

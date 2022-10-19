@@ -21,6 +21,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import io.spring.initializr.generator.buildsystem.BillOfMaterials;
 import io.spring.initializr.generator.buildsystem.BuildWriter;
 import io.spring.initializr.generator.buildsystem.Dependency;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuild;
@@ -92,6 +93,8 @@ public class MavenBuildProjectContributor implements BuildWriter, ProjectContrib
 		try (IndentingWriter writer = this.indentingWriterFactory.createIndentingWriter("maven", out)) {
 			for (String depend : dependModule) {
 				this.build.modules().module(depend);
+				this.build.boms().add(depend, BillOfMaterials.withCoordinates(this.description.getPackageName(), depend)
+						.version(VersionReference.ofValue("0.0.1-SNAPSHOT")));
 			}
 			this.buildWriter.writeTo(writer, this.build);
 		}
