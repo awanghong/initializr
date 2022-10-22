@@ -141,7 +141,7 @@ public class MavenBuildProjectContributor implements BuildWriter, ProjectContrib
 			if (dependModule != null) {
 				for (String singleModule : dependModule) {
 					Dependency original = Dependency.withCoordinates(this.build.getSettings().getGroup(), singleModule)
-							.version(VersionReference.ofValue("${project.version}")).build();
+							.build();
 					newMavenBuild.dependencies().add(singleModule, Dependency.from(original));
 				}
 			}

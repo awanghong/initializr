@@ -45,10 +45,10 @@ import org.springframework.context.annotation.Bean;
 @ConditionalOnBuildSystem(MavenBuildSystem.ID)
 public class MavenProjectGenerationConfiguration {
 
-	@Bean
-	public MavenWrapperContributor mavenWrapperContributor() {
-		return new MavenWrapperContributor();
-	}
+	/*
+	 * @Bean public MavenWrapperContributor mavenWrapperContributor() { return new
+	 * MavenWrapperContributor(); }
+	 */
 
 	@Bean
 	public MavenBuild mavenBuild(ObjectProvider<BuildItemResolver> buildItemResolver,

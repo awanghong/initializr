@@ -56,10 +56,11 @@ public class BuildProjectGenerationConfiguration {
 						.scope(DependencyScope.TEST_COMPILE));
 	}
 
-	@Bean
-	public DefaultStarterBuildCustomizer defaultStarterContributor(InitializrMetadata metadata) {
-		return new DefaultStarterBuildCustomizer(metadata);
-	}
+	/*
+	 * @Bean public DefaultStarterBuildCustomizer
+	 * defaultStarterContributor(InitializrMetadata metadata) { return new
+	 * DefaultStarterBuildCustomizer(metadata); }
+	 */
 
 	@Bean
 	public DefaultMavenBuildCustomizer initializrMetadataMavenBuildCustomizer(ProjectDescription description,
