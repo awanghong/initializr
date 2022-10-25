@@ -58,4 +58,16 @@ public class DemoMeta extends MetadataElement implements Describable {
 		return this.description;
 	}
 
+	public void setDependencies(List<String> dependencies) {
+		this.dependencies = dependencies;
+	}
+
+	public void setRelated(List<String> related) {
+		this.related = related;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }
