@@ -28,6 +28,8 @@ import io.spring.initializr.generator.version.Version;
 import io.spring.initializr.generator.version.Version.Format;
 import io.spring.initializr.generator.version.VersionParser;
 import io.spring.initializr.metadata.DefaultMetadataElement;
+import io.spring.initializr.metadata.DemoMeta;
+import io.spring.initializr.metadata.DemosCapability;
 import io.spring.initializr.metadata.DependenciesCapability;
 import io.spring.initializr.metadata.Dependency;
 import io.spring.initializr.metadata.DependencyGroup;
@@ -81,6 +83,7 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 		ObjectNode delegate = nodeFactory.objectNode();
 		links(delegate, metadata.getTypes().getContent(), appUrl);
 		dependencies(delegate, metadata.getDependencies());
+		democodes(delegate, metadata.getDemocodes());
 		type(delegate, metadata.getTypes());
 		singleSelect(delegate, metadata.getPackagings());
 		singleSelect(delegate, metadata.getJavaVersions());
@@ -124,6 +127,15 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 		values.addAll(capability.getContent().stream().map(this::mapDependencyGroup).collect(Collectors.toList()));
 		dependencies.set("values", values);
 		parent.set(capability.getId(), dependencies);
+	}
+
+	protected void democodes(ObjectNode parent, DemosCapability capability) {
+		ObjectNode jsonNodes = nodeFactory.objectNode();
+		jsonNodes.put("type", capability.getType().getName());
+		ArrayNode values = nodeFactory.arrayNode();
+		values.addAll(capability.getContent().stream().map(this::mapDemoMeta).collect(Collectors.toList()));
+		jsonNodes.set("values", values);
+		parent.set(capability.getId(), jsonNodes);
 	}
 
 	protected void type(ObjectNode parent, TypeCapability capability) {
@@ -195,6 +207,19 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 			}
 		});
 		result.set("values", items);
+		return result;
+	}
+
+	protected ObjectNode mapDemoMeta(DemoMeta demoMeta) {
+		ObjectNode result = mapValue(demoMeta);
+		List<String> demoDependencies = demoMeta.getDependencies();
+		if (!demoDependencies.isEmpty()) {
+			result.put("dependencies", demoDependencies.toString());
+		}
+		List<String> related = demoMeta.getRelated();
+		if (!related.isEmpty()) {
+			result.put("related", related.toString());
+		}
 		return result;
 	}
 

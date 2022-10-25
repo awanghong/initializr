@@ -37,6 +37,8 @@ public class InitializrMetadata {
 
 	private final DependenciesCapability dependencies = new DependenciesCapability();
 
+	private final DemosCapability democodes = new DemosCapability();
+
 	private final TypeCapability types = new TypeCapability();
 
 	private final SingleSelectCapability bootVersions = new SingleSelectCapability("bootVersion", "Spring Boot Version",
@@ -80,6 +82,10 @@ public class InitializrMetadata {
 
 	public DependenciesCapability getDependencies() {
 		return this.dependencies;
+	}
+
+	public DemosCapability getDemocodes() {
+		return this.democodes;
 	}
 
 	public TypeCapability getTypes() {
@@ -137,6 +143,7 @@ public class InitializrMetadata {
 	public void merge(InitializrMetadata other) {
 		this.configuration.merge(other.configuration);
 		this.dependencies.merge(other.dependencies);
+		this.democodes.merge(other.democodes);
 		this.types.merge(other.types);
 		this.bootVersions.merge(other.bootVersions);
 		this.packagings.merge(other.packagings);
@@ -157,6 +164,7 @@ public class InitializrMetadata {
 	public void validate() {
 		this.configuration.validate();
 		this.dependencies.validate();
+		this.democodes.validate();
 
 		Map<String, Repository> repositories = this.configuration.getEnv().getRepositories();
 		Map<String, BillOfMaterials> boms = this.configuration.getEnv().getBoms();

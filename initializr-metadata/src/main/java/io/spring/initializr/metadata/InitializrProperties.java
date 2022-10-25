@@ -39,6 +39,12 @@ public class InitializrProperties extends InitializrConfiguration {
 	private final List<DependencyGroup> dependencies = new ArrayList<>();
 
 	/**
+	 * Democodes, organized in groups (i.e. themes).
+	 */
+	@JsonIgnore
+	private final List<DemoMeta> democodes = new ArrayList<>();
+
+	/**
 	 * Available project types.
 	 */
 	@JsonIgnore
@@ -112,6 +118,10 @@ public class InitializrProperties extends InitializrConfiguration {
 
 	public List<DependencyGroup> getDependencies() {
 		return this.dependencies;
+	}
+
+	public List<DemoMeta> getDemocodes() {
+		return this.democodes;
 	}
 
 	public List<Type> getTypes() {
