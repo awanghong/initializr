@@ -21,6 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -56,11 +57,14 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 
 	private static final JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
 
+	private static final ObjectMapper objectMapper = new ObjectMapper();
+
 	private final TemplateVariables templateVariables;
 
 	public InitializrMetadataV2JsonMapper() {
 		this.templateVariables = new TemplateVariables(
 				new TemplateVariable("dependencies", TemplateVariable.VariableType.REQUEST_PARAM),
+				new TemplateVariable("democodes", TemplateVariable.VariableType.REQUEST_PARAM),
 				new TemplateVariable("packaging", TemplateVariable.VariableType.REQUEST_PARAM),
 				new TemplateVariable("javaVersion", TemplateVariable.VariableType.REQUEST_PARAM),
 				new TemplateVariable("language", TemplateVariable.VariableType.REQUEST_PARAM),
@@ -214,11 +218,13 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 		ObjectNode result = mapValue(demoMeta);
 		List<String> demoDependencies = demoMeta.getDependencies();
 		if (!demoDependencies.isEmpty()) {
-			result.put("dependencies", demoDependencies.toString());
+			ArrayNode items = objectMapper.valueToTree(demoDependencies);
+			result.putArray("dependencies").addAll(items);
 		}
 		List<String> related = demoMeta.getRelated();
 		if (!related.isEmpty()) {
-			result.put("related", related.toString());
+			ArrayNode items = objectMapper.valueToTree(related);
+			result.putArray("related").addAll(items);
 		}
 		return result;
 	}

@@ -231,4 +231,15 @@
 		</profile>
 	</profiles>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>rdc-snapshots</id>
+			<url>https://repo.rdc.aliyun.com/repository/130679-snapshot-rJAYtu/</url>
+		</snapshotRepository>
+		<repository>
+			<id>rdc-releases</id>
+			<url>https://repo.rdc.aliyun.com/repository/130679-release-zqxH6P/</url>
+		</repository>
+	</distributionManagement>
+
 </project>
