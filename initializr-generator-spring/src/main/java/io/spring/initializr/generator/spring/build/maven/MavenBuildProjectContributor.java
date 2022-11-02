@@ -94,7 +94,7 @@ public class MavenBuildProjectContributor implements BuildWriter, ProjectContrib
 			for (String depend : dependModule) {
 				this.build.modules().module(depend);
 				this.build.boms().add(depend, BillOfMaterials.withCoordinates(this.description.getPackageName(), depend)
-						.version(VersionReference.ofValue("0.0.1-SNAPSHOT")));
+						.version(VersionReference.ofValue(this.build.getSettings().getVersion())));
 			}
 			this.buildWriter.writeTo(writer, this.build);
 		}
