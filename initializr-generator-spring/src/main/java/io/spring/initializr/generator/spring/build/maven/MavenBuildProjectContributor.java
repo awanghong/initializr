@@ -93,7 +93,7 @@ public class MavenBuildProjectContributor implements BuildWriter, ProjectContrib
 		try (IndentingWriter writer = this.indentingWriterFactory.createIndentingWriter("maven", out)) {
 			for (String depend : dependModule) {
 				this.build.modules().module(depend);
-				this.build.boms().add(depend, BillOfMaterials.withCoordinates(this.description.getPackageName(), depend)
+				this.build.boms().add(depend, BillOfMaterials.withCoordinates(this.description.getGroupId(), depend)
 						.version(VersionReference.ofValue(this.build.getSettings().getVersion())));
 			}
 			this.buildWriter.writeTo(writer, this.build);
