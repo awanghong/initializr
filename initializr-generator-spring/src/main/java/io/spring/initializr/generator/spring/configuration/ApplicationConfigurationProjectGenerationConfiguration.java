@@ -17,10 +17,13 @@
 package io.spring.initializr.generator.spring.configuration;
 
 import io.spring.initializr.generator.buildsystem.Build;
+import io.spring.initializr.generator.io.IndentingWriterFactory;
 import io.spring.initializr.generator.project.ProjectDescription;
 import io.spring.initializr.generator.project.ProjectGenerationConfiguration;
+import io.spring.initializr.generator.spring.code.PropertiesCustomizer;
 import io.spring.initializr.metadata.InitializrMetadata;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -37,8 +40,10 @@ public class ApplicationConfigurationProjectGenerationConfiguration {
 	}
 
 	@Bean
-	public ModulePropertiesContributor modulePropertiesContributor(ProjectDescription description) {
-		return new ModulePropertiesContributor(description);
+	public ModulePropertiesContributor modulePropertiesContributor(ProjectDescription description,
+			ObjectProvider<PropertiesCustomizer<?>> propertiesCustomizers,
+			IndentingWriterFactory indentingWriterFactory) {
+		return new ModulePropertiesContributor(description, propertiesCustomizers, indentingWriterFactory);
 	}
 
 }

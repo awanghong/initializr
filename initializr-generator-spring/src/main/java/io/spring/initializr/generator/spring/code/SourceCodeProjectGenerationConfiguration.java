@@ -36,11 +36,12 @@ import org.springframework.context.annotation.Configuration;
 @ProjectGenerationConfiguration
 public class SourceCodeProjectGenerationConfiguration {
 
-	@Bean
-	public MainApplicationTypeCustomizer<TypeDeclaration> springBootApplicationAnnotator() {
-		return (typeDeclaration) -> typeDeclaration
-				.annotate(Annotation.name("org.springframework.boot.autoconfigure.SpringBootApplication"));
-	}
+	// @Bean
+	// public MainApplicationTypeCustomizer<TypeDeclaration>
+	// springBootApplicationAnnotator() {
+	// return (typeDeclaration) -> typeDeclaration
+	// .annotate(Annotation.name("org.springframework.boot.autoconfigure.SpringBootApplication"));
+	// }
 
 	@Bean
 	public TestApplicationTypeCustomizer<TypeDeclaration> junitJupiterSpringBootTestTypeCustomizer() {

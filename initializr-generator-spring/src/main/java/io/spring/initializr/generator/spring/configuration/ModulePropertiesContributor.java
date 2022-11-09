@@ -17,12 +17,22 @@
 package io.spring.initializr.generator.spring.configuration;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import io.spring.initializr.generator.io.IndentingWriter;
+import io.spring.initializr.generator.io.IndentingWriterFactory;
 import io.spring.initializr.generator.project.ProjectDescription;
+import io.spring.initializr.generator.project.PropertiesContainer;
 import io.spring.initializr.generator.project.contributor.ProjectContributor;
-import io.spring.initializr.generator.project.contributor.SingleResourceProjectContributor;
+import io.spring.initializr.generator.spring.code.PropertiesCustomizer;
+import io.spring.initializr.generator.spring.util.LambdaSafe;
 import io.spring.initializr.generator.spring.util.MavenModuleUtil;
+
+import org.springframework.beans.factory.ObjectProvider;
 
 /**
  * A {@link ProjectContributor} that creates module-specific directories when a
@@ -30,20 +40,57 @@ import io.spring.initializr.generator.spring.util.MavenModuleUtil;
  *
  * @author wang hong
  */
-public class ModulePropertiesContributor extends SingleResourceProjectContributor {
+public class ModulePropertiesContributor implements ProjectContributor {
 
 	private final ProjectDescription description;
 
-	public ModulePropertiesContributor(ProjectDescription description) {
-		super("src/main/resources/application.properties", "classpath:configuration/application.properties");
+	private final ObjectProvider<PropertiesCustomizer<?>> propertiesCustomizers;
+
+	private final IndentingWriterFactory indentingWriterFactory;
+
+	private final String EQUAL = "=";
+
+	private final String relativePath = "src/main/resources/application.properties";
+
+	public ModulePropertiesContributor(ProjectDescription description,
+			ObjectProvider<PropertiesCustomizer<?>> propertiesCustomizers,
+			IndentingWriterFactory indentingWriterFactory) {
 		this.description = description;
+		this.propertiesCustomizers = propertiesCustomizers;
+		this.indentingWriterFactory = indentingWriterFactory;
 	}
 
 	@Override
 	public void contribute(Path projectRoot) throws IOException {
 		projectRoot = MavenModuleUtil.obtainMavenModulePath(this.description.getArchitecture(),
 				this.description.getName(), projectRoot);
-		super.contribute(projectRoot);
+		Path output = projectRoot.resolve(this.relativePath);
+		if (!Files.exists(output)) {
+			Files.createDirectories(output.getParent());
+			Files.createFile(output);
+		}
+		PropertiesContainer propertiesContainer = new PropertiesContainer();
+		customizeProperties(propertiesContainer);
+		writeTo(propertiesContainer, output);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void customizeProperties(PropertiesContainer propertiesContainer) {
+		List<PropertiesCustomizer<?>> customizers = this.propertiesCustomizers.orderedStream()
+				.collect(Collectors.toList());
+		LambdaSafe.callbacks(PropertiesCustomizer.class, customizers, propertiesContainer)
+				.invoke((customizer) -> customizer.customize(propertiesContainer));
+	}
+
+	private void writeTo(PropertiesContainer propertiesContainer, Path output) throws IOException {
+		if (propertiesContainer.isEmpty()) {
+			return;
+		}
+		Map<String, String> properties = propertiesContainer.values();
+		try (IndentingWriter writer = this.indentingWriterFactory.createIndentingWriter("java",
+				Files.newBufferedWriter(output))) {
+			properties.entrySet().forEach((entry) -> writer.println(entry.getKey() + this.EQUAL + entry.getValue()));
+		}
 	}
 
 }

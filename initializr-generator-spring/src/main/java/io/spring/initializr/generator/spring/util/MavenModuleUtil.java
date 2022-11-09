@@ -55,6 +55,11 @@ public final class MavenModuleUtil {
 	 */
 	public static final String WEB;
 
+	/**
+	 * main class location add package.
+	 */
+	public static final String WEB_PACKAGE;
+
 	static {
 		MVC_ARCHITECTURE = "mvc";
 		NONE_ARCHITECTURE = "none";
@@ -62,6 +67,7 @@ public final class MavenModuleUtil {
 		COMMON = "-common";
 		CORE = "-core";
 		WEB = "-web";
+		WEB_PACKAGE = ".web";
 	}
 
 	private MavenModuleUtil() {

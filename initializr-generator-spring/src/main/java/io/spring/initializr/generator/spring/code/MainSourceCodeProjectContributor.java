@@ -73,7 +73,8 @@ public class MainSourceCodeProjectContributor<T extends TypeDeclaration, C exten
 	public void contribute(Path projectRoot) throws IOException {
 		S sourceCode = this.sourceFactory.get();
 		String applicationName = this.description.getApplicationName();
-		C compilationUnit = sourceCode.createCompilationUnit(this.description.getPackageName(), applicationName);
+		C compilationUnit = sourceCode.createCompilationUnit(
+				this.description.getPackageName() + MavenModuleUtil.WEB_PACKAGE, applicationName);
 		T mainApplicationType = compilationUnit.createTypeDeclaration(applicationName);
 		customizeMainApplicationType(mainApplicationType);
 		customizeMainCompilationUnit(compilationUnit);

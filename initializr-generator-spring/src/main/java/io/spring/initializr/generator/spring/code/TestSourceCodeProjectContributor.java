@@ -69,7 +69,8 @@ public class TestSourceCodeProjectContributor<T extends TypeDeclaration, C exten
 	public void contribute(Path projectRoot) throws IOException {
 		S sourceCode = this.sourceFactory.get();
 		String testName = this.description.getApplicationName() + "Tests";
-		C compilationUnit = sourceCode.createCompilationUnit(this.description.getPackageName(), testName);
+		C compilationUnit = sourceCode
+				.createCompilationUnit(this.description.getPackageName() + MavenModuleUtil.WEB_PACKAGE, testName);
 		T testApplicationType = compilationUnit.createTypeDeclaration(testName);
 		customizeTestApplicationType(testApplicationType);
 		customizeTestSourceCode(sourceCode);
