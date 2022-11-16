@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @author Wang Hong
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class DemoMeta extends MetadataElement implements Describable {
+public class DemoMeta extends DefaultMetadataElement implements Describable {
 
 	private List<String> dependencies = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class DemoMeta extends MetadataElement implements Describable {
 	}
 
 	public DemoMeta(DemoMeta demoMeta) {
-		super(demoMeta);
+		super(demoMeta.getId(), demoMeta.getName(), demoMeta.isDefault());
 		this.dependencies.addAll(demoMeta.dependencies);
 		this.related.addAll(demoMeta.related);
 	}
