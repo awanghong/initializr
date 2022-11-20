@@ -215,7 +215,7 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 	}
 
 	protected ObjectNode mapDemoMeta(DemoMeta demoMeta) {
-		ObjectNode result = mapValue(demoMeta);
+		ObjectNode result = mapDefaultMetaValue(demoMeta);
 		List<String> demoDependencies = demoMeta.getDependencies();
 		if (!demoDependencies.isEmpty()) {
 			ArrayNode items = objectMapper.valueToTree(demoDependencies);
@@ -264,6 +264,14 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 		result.put("name", value.getName());
 		if ((value instanceof Describable) && ((Describable) value).getDescription() != null) {
 			result.put("description", ((Describable) value).getDescription());
+		}
+		return result;
+	}
+
+	protected ObjectNode mapDefaultMetaValue(DefaultMetadataElement value) {
+		ObjectNode result = mapValue(value);
+		if (value.isDefault()) {
+			result.put("default", true);
 		}
 		return result;
 	}

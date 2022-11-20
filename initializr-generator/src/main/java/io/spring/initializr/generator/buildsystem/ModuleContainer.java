@@ -31,79 +31,93 @@ import io.spring.initializr.generator.buildsystem.maven.MavenBuild;
  */
 public class ModuleContainer {
 
-	/**
-	 * 模块集合.
-	 *
-	 * @author 王红
-	 * @date 2022/9/13 20:47
-	 */
-	private final List<String> modules = new ArrayList<>();
+    private final BuildItemResolver buildItemResolver;
 
-	/**
-	 * 每个模块的pom文件.
-	 *
-	 * @author 王红
-	 * @date 2022/9/13 20:47
-	 */
-	private final Map<String, MavenBuild> moduleBuildMap = new HashMap<>();
 
-	/**
-	 * Specify if this container is empty.
-	 * @return {@code true} if no module build is registered
-	 */
-	public boolean isEmptyModuleBuildMap() {
-		return this.modules.isEmpty();
-	}
+    public ModuleContainer(BuildItemResolver buildItemResolver) {
+        this.buildItemResolver = buildItemResolver;
+    }
 
-	/**
-	 * Register a module with the specified {@code module}.
-	 * @param module the name of a module
-	 * @param mavenBuild the name of a module build
-	 * @return this container
-	 */
-	public ModuleContainer moduleBuild(String module, MavenBuild mavenBuild) {
-		this.moduleBuildMap.put(module, mavenBuild);
-		return this;
-	}
 
-	/**
-	 * Obtain a module with the specified {@code module}.
-	 * @param module the name of a module
-	 * @return this MavenBuild
-	 */
-	public MavenBuild obtainModuleBuild(String module) {
-		MavenBuild moduleBuild = this.moduleBuildMap.get(module);
-		if (moduleBuild == null) {
-			moduleBuild = new MavenBuild();
-			this.moduleBuildMap.put(module, moduleBuild);
-		}
-		return moduleBuild;
-	}
+    /**
+     * 模块集合.
+     *
+     * @author 王红
+     * @date 2022/9/13 20:47
+     */
+    private final List<String> modules = new ArrayList<>();
 
-	/**
-	 * Specify if this container is empty.
-	 * @return {@code true} if no module is registered
-	 */
-	public boolean isEmpty() {
-		return this.modules.isEmpty();
-	}
+    /**
+     * 每个模块的pom文件.
+     *
+     * @author 王红
+     * @date 2022/9/13 20:47
+     */
+    private final Map<String, MavenBuild> moduleBuildMap = new HashMap<>();
 
-	/**
-	 * Register a module with the specified {@code module}.
-	 * @param module the name of a module
-	 * @return this container
-	 */
-	public ModuleContainer module(String module) {
-		this.modules.add(module);
-		return this;
-	}
+    /**
+     * Specify if this container is empty.
+     *
+     * @return {@code true} if no module build is registered
+     */
+    public boolean isEmptyModuleBuildMap() {
+        return this.modules.isEmpty();
+    }
 
-	/**
-	 * Return the registered properties. Does not contain registered versions.
-	 * @return the module entries
-	 */
-	public Stream<String> values() {
-		return this.modules.stream();
-	}
+    /**
+     * Register a module with the specified {@code module}.
+     *
+     * @param module     the name of a module
+     * @param mavenBuild the name of a module build
+     * @return this container
+     */
+    public ModuleContainer moduleBuild(String module, MavenBuild mavenBuild) {
+        this.moduleBuildMap.put(module, mavenBuild);
+        return this;
+    }
+
+    /**
+     * Obtain a module with the specified {@code module}.
+     *
+     * @param module the name of a module
+     * @return this MavenBuild
+     */
+    public MavenBuild obtainModuleBuild(String module) {
+        MavenBuild moduleBuild = this.moduleBuildMap.get(module);
+        if (moduleBuild == null) {
+            moduleBuild = new MavenBuild(buildItemResolver);
+            this.moduleBuildMap.put(module, moduleBuild);
+        }
+        return moduleBuild;
+    }
+
+    /**
+     * Specify if this container is empty.
+     *
+     * @return {@code true} if no module is registered
+     */
+    public boolean isEmpty() {
+        return this.modules.isEmpty();
+    }
+
+    /**
+     * Register a module with the specified {@code module}.
+     *
+     * @param module the name of a module
+     * @return this container
+     */
+    public ModuleContainer module(String module) {
+        this.modules.add(module);
+        return this;
+    }
+
+    /**
+     * Return the registered properties. Does not contain registered versions.
+     *
+     * @return the module entries
+     */
+    public Stream<String> values() {
+        return this.modules.stream();
+    }
 
 }
